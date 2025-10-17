@@ -28,5 +28,7 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-users', User::class);
+        yield MenuItem::linkToCrud('Comptes Email', 'fa fa-envelope', \App\Entity\EmailAccount::class);
+
     }
 }

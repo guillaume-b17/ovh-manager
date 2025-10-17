@@ -18,3 +18,9 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Service\OvhClientService:
+        arguments:
+            $appKey: '%env(OVH_APP_KEY)%'
+            $appSecret: '%env(OVH_APP_SECRET)%'
+            $consumerKey: '%env(OVH_CONSUMER_KEY)%'
+            $endpoint: '%env(OVH_ENDPOINT)%'
