@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Bienvenue {{ app.user ? app.user.email : 'visiteur' }}</h1>
+
+        {% if app.user %}
+            <a href="{{ path('app_logout') }}" class="btn btn-outline-danger mt-3">Déconnexion</a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="btn btn-primary mt-3">Connexion</a>
+        {% endif %}
+    </div>
+{% endblock %}

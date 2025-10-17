@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h2>Mot de passe oublié</h2>
+    <form method="post">
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+        <button class="btn btn-primary">Envoyer le lien</button>
+    </form>
+    <div class="text-center mt-3">
+        <a href="{{ path('app_login') }}">← Revenir à la page de connexion</a>
+    </div>
+{% endblock %}
