@@ -2,7 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Responder;
 use App\Entity\User;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -21,7 +23,9 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('OVH Manager');
+            ->setTitle('OVH Manager')
+            ->renderContentMaximized();
+
     }
 
     public function configureMenuItems(): iterable
@@ -29,6 +33,13 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-users', User::class);
         yield MenuItem::linkToCrud('Comptes Email', 'fa fa-envelope', \App\Entity\EmailAccount::class);
-
+        yield MenuItem::linkToCrud('Répondeurs OVH', 'fa fa-reply', Responder::class);
     }
+
+    public function configureAssets(): Assets
+    {
+        return Assets::new()->addWebpackEncoreEntry('app');
+    }
+
+
 }

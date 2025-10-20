@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Entity\EmailAccount;
+use App\Entity\User;
 use App\Service\OvhClientService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -156,6 +157,10 @@ class OvhEmailController extends AbstractController
 
                     // 6️⃣ Date de synchro
                     $entity->setDateSync(new \DateTimeImmutable());
+
+                    $user = $this->em->getRepository(User::class)->findOneBy(['email' => $entity->getEmail()]);
+                    $entity->setUser($user);
+
 
                     // 7️⃣ Persistance
                     $this->em->persist($entity);

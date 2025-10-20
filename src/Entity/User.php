@@ -6,6 +6,10 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -37,6 +41,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $resetRequestedAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: EmailAccount::class)]
+    private Collection $emailAccounts;
+
+    public function getEmailAccounts(): Collection
+    {
+        return $this->emailAccounts;
+    }
+
 
     public function getResetToken(): ?string { return $this->resetToken; }
     public function setResetToken(?string $t): self { $this->resetToken = $t; return $this; }
@@ -125,4 +138,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // @deprecated, to be removed when upgrading to Symfony 8
     }
+
+    public function __toString(): string
+    {
+        return $this->getEmail() ?: '(Utilisateur sans email)';
+    }
+
 }

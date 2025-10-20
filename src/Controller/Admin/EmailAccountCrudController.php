@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\EmailAccount;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, TextField, NumberField, DateTimeField};
+use EasyCorp\Bundle\EasyAdminBundle\Field\{AssociationField, IdField, TextField, NumberField, DateTimeField};
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -49,6 +49,10 @@ class EmailAccountCrudController extends AbstractCrudController
         yield NumberField::new('usagePercent', 'Utilisation (%)')
             ->formatValue(fn($v) => $v ? $v . ' %' : '-');
 
+        yield AssociationField::new('user', 'Utilisateur lié')
+            ->setCrudController(UserCrudController::class)
+            ->setHelp('Utilisateur correspondant à cette adresse email (si trouvé)');
+
 
         yield DateTimeField::new('dateSync', 'Dernière synchro')
             ->setFormat('short', 'short');
@@ -73,7 +77,7 @@ class EmailAccountCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         // ✅ Crée le bouton global
-        $syncAction = Action::new('syncFromOvh', '🔁 Synchroniser depuis OVH')
+        $syncAction = Action::new('syncFromOvh', 'Synchroniser depuis OVH')
             ->setCssClass('btn btn-primary')
             ->createAsGlobalAction() // affiché en haut de la page index
             ->linkToUrl($this->urlGenerator->generate('ovh_email_sync'));

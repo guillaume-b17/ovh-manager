@@ -1,0 +1,31 @@
+// ============================
+// 🔹 Loader global
+// ============================
+#global-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 20000;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .loader-content {
+        text-align: center;
+        color: #fff;
+
+        p {
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+    }
+}
+
+// ============================
+// 🔹 Messages flash
+// ============================
+.alert {
+    transition: opacity 0.4s;
+    position: relative;
+    z-index: 10000;
+}

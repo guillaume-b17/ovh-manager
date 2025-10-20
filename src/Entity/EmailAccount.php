@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\EmailAccountRepository;
 use Cassandra\Bigint;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EmailAccountRepository::class)]
@@ -40,6 +41,23 @@ class EmailAccount
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $usageDate = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?User $user = null;
+
+    #[ORM\OneToMany(mappedBy: 'emailAccount', targetEntity: Responder::class, cascade: ['persist', 'remove'])]
+    private Collection $responders;
+
+    public function __construct()
+    {
+        $this->responders = new ArrayCollection();
+    }
+
+    public function getResponders(): Collection
+    {
+        return $this->responders;
+    }
 
 
     public function getId(): ?int
@@ -178,5 +196,21 @@ class EmailAccount
         return $this;
     }
 
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        // TODO: Implement __toString() method.
+        return $this->email;
+    }
 
 }
