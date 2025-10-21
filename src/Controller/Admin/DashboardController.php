@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Redirection;
 use App\Entity\Responder;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -34,6 +35,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-users', User::class);
         yield MenuItem::linkToCrud('Comptes Email', 'fa fa-envelope', \App\Entity\EmailAccount::class);
         yield MenuItem::linkToCrud('Répondeurs OVH', 'fa fa-reply', Responder::class);
+        yield MenuItem::linkToCrud('Redirections OVH', 'fa fa-reply', Redirection::class);
     }
 
     public function configureAssets(): Assets
