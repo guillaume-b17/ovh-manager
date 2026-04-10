@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="228f0aba-a137-4f1d-9558-1fcd42247d4a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ovh-manager.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ovh-manager.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/symfony2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerConfigs">
+    <option name="configs">
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/form/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/dependency-injection/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/console/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/cache/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/runtime/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/doctrine-bridge/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/ux-twig-component/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/mime/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/http-client-contracts/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/twig/twig/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/inflector/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/string/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/orm/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/league/oauth2-client/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/webpack-encore-bundle/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/dbal/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/property-access/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/polyfill-intl-icu/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/guzzlehttp/psr7/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/monolog-bundle/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/deprecations/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/var-exporter/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/easycorp/easyadmin-bundle/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/polyfill-intl-idn/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/translation-contracts/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/asset/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/property-info/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/psr/event-dispatcher/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/monolog/monolog/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/http-kernel/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/mailer/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/twig/extra-bundle/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/translation/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/error-handler/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/persistence/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/migrations/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/framework-bundle/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/guzzlehttp/guzzle/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/dotenv/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/filesystem/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/yaml/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/var-dumper/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/routing/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/http-foundation/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/options-resolver/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/twig/html-extra/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/deprecation-contracts/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/finder/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/monolog-bridge/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/guzzlehttp/promises/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/collections/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/polyfill-uuid/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/lexer/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/validator/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/clock/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/password-hasher/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/event-dispatcher/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/security-http/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/psr/http-message/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/polyfill-php83/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/config/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/egulias/email-validator/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/instantiator/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/stopwatch/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/event-manager/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/ralouphie/getallheaders/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/twig-bridge/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/polyfill-php84/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/ovh/ovh/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/service-contracts/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/psr/log/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/http-client/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/polyfill-intl-grapheme/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/twig-bundle/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/event-dispatcher-contracts/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/polyfill-mbstring/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/intl/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/sql-formatter/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/psr/cache/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/security-core/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/cache-contracts/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/psr/http-factory/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/uid/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/doctrine-migrations-bundle/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/psr/http-client/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/flex/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/type-info/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/psr/clock/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/psr/container/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/security-bundle/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/security-csrf/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/doctrine/doctrine-bundle/composer.json" />
+      <option value="$PROJECT_DIR$/vendor_bak/symfony/polyfill-intl-normalizer/composer.json" />
+    </option>
+  </component>
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP" />
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="38LSHf3nbv7ZysLOEXycARkkBKv" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/redirections&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PS-252.26830.95" />
+        <option value="bundled-php-predefined-a98d8de5180a-9b563d34894c-com.jetbrains.php.sharedIndexes-PS-252.26830.95" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="228f0aba-a137-4f1d-9558-1fcd42247d4a" name="Changes" comment="" />
+      <created>1768577272150</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1768577272150</updated>
+      <workItem from="1768577273236" duration="2018000" />
+      <workItem from="1769179709896" duration="218000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
