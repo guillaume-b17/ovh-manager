@@ -1,11 +1,120 @@
-// ============================
-// 🔹 Loader global
-// ============================
+:root {
+    --ovh-primary: #2563eb;
+    --ovh-primary-dark: #1d4ed8;
+    --ovh-surface: #ffffff;
+    --ovh-border: #dbe3ef;
+    --ovh-text: #0f172a;
+    --ovh-text-soft: #475569;
+}
+
+body.app-shell {
+    color: var(--ovh-text);
+    background: linear-gradient(135deg, #e0ecff 0%, #f5f9ff 45%, #f8fafc 100%);
+    min-height: 100vh;
+    position: relative;
+    font-family: 'Source Sans 3', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+.app-bg-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.2), transparent 30%),
+        radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.12), transparent 35%);
+}
+
+.app-header {
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.brand-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--ovh-primary), #38bdf8);
+    box-shadow: 0 0 0 0.35rem rgba(37, 99, 235, 0.2);
+}
+
+.brand-text {
+    color: #0b1222;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.app-content {
+    max-width: 1100px;
+}
+
+.auth-shell {
+    min-height: calc(100vh - 160px);
+    display: grid;
+    place-items: center;
+}
+
+.auth-card {
+    width: min(100%, 430px);
+    border: 1px solid var(--ovh-border);
+    border-radius: 1rem;
+    background: var(--ovh-surface);
+    padding: 2rem;
+    box-shadow: 0 16px 40px -20px rgba(15, 23, 42, 0.4);
+}
+
+.auth-title {
+    margin-bottom: 0.35rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.auth-subtitle {
+    margin-bottom: 1.5rem;
+    color: var(--ovh-text-soft);
+}
+
+.form-control {
+    border-color: var(--ovh-border);
+    border-radius: 0.7rem;
+    padding: 0.65rem 0.85rem;
+}
+
+.form-control:focus {
+    border-color: rgba(37, 99, 235, 0.65);
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.15);
+}
+
+.btn {
+    border-radius: 0.7rem;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background-color: var(--ovh-primary);
+    border-color: var(--ovh-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--ovh-primary-dark);
+    border-color: var(--ovh-primary-dark);
+}
+
+.alert {
+    border-radius: 0.8rem;
+    border: none;
+    transition: opacity 0.4s;
+    position: relative;
+    z-index: 10000;
+    box-shadow: 0 12px 22px -20px rgba(15, 23, 42, 0.7);
+}
+
 #global-loader {
     position: fixed;
     inset: 0;
     z-index: 20000;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(15, 23, 42, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,11 +130,4 @@
     }
 }
 
-// ============================
-// 🔹 Messages flash
-// ============================
-.alert {
-    transition: opacity 0.4s;
-    position: relative;
-    z-index: 10000;
-}
+@import 'portal';

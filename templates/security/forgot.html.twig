@@ -1,14 +1,24 @@
 {% extends 'base.html.twig' %}
+
+{% block title %}Mot de passe oublie{% endblock %}
+
 {% block body %}
-    <h2>Mot de passe oublié</h2>
-    <form method="post">
-        <div class="mb-3">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control" required>
+    <section class="auth-shell">
+        <div class="auth-card">
+            <h1 class="auth-title">Mot de passe oublie</h1>
+            <p class="auth-subtitle">Entrez votre email pour recevoir un lien de reinitialisation.</p>
+
+            <form method="post" novalidate>
+                <div class="mb-4">
+                    <label for="forgotEmail" class="form-label">Email</label>
+                    <input id="forgotEmail" type="email" name="email" class="form-control" required>
+                </div>
+                <button class="btn btn-primary w-100">Envoyer le lien</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="{{ path('app_login') }}" class="text-decoration-none">Retour a la connexion</a>
+            </div>
         </div>
-        <button class="btn btn-primary">Envoyer le lien</button>
-    </form>
-    <div class="text-center mt-3">
-        <a href="{{ path('app_login') }}">← Revenir à la page de connexion</a>
-    </div>
+    </section>
 {% endblock %}
