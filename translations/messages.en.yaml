@@ -1,0 +1,14 @@
+responder:
+  preset:
+    absence: |
+      Hello,
+
+      I am away for a short time and will get back to you very soon.
+
+      Best regards
+    conges: |
+      Hello,
+
+      I am away until [return date]. For urgent matters, please contact [contact details].
+
+      Best regards

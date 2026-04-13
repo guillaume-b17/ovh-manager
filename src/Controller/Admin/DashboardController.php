@@ -2,8 +2,10 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\OrganizationSetting;
 use App\Entity\Redirection;
 use App\Entity\Responder;
+use App\Entity\ResponderMessageTemplate;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -32,9 +34,12 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home');
+        yield MenuItem::linkToRoute('Mon compte e-mail', 'fa fa-envelope-open', 'app_account');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-users', User::class);
         yield MenuItem::linkToCrud('Comptes Email', 'fa fa-envelope', \App\Entity\EmailAccount::class);
         yield MenuItem::linkToCrud('Répondeurs OVH', 'fa fa-reply', Responder::class);
+        yield MenuItem::linkToCrud('Modèles message répondeur', 'fa fa-file-text', ResponderMessageTemplate::class);
+        yield MenuItem::linkToCrud('Téléphone agence (répondeurs)', 'fa fa-phone', OrganizationSetting::class);
         yield MenuItem::linkToCrud('Redirections OVH', 'fa fa-reply', Redirection::class);
     }
 

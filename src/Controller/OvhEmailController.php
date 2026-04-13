@@ -181,7 +181,8 @@ class OvhEmailController extends AbstractController
         }
 
         $this->addFlash('success', "✅ Synchronisation réussie ($synced comptes)");
-        return $this->redirectToRoute('admin');
+
+        return $this->redirectToRoute('app_home');
     }
 
 }

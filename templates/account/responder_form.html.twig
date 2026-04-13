@@ -1,0 +1,116 @@
+{% extends 'account/account_base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <nav aria-label="Fil d’Ariane" class="portal-breadcrumb">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{{ path('app_account') }}">Mon compte</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+        </ol>
+    </nav>
+
+    <header class="portal-hero portal-hero--compact">
+        <h1 class="portal-hero__title">{{ title }}</h1>
+        <p class="portal-hero__subtitle mb-0">Boîte : <strong>{{ account.email }}</strong></p>
+    </header>
+
+    {{ form_start(form, { attr: { class: 'portal-form-card', novalidate: 'novalidate' } }) }}
+        {{ form_errors(form) }}
+
+        <div class="mb-4">
+            <span class="form-label d-block fw-semibold">Modèles de message</span>
+            <p class="small text-muted mb-2">Insère un texte prédéfini dans le champ ci-dessous (modifiable ensuite). Les modèles et le numéro d’agence sont configurés dans l’administration (<strong>Modèles message répondeur</strong>, <strong>Téléphone agence</strong>). Variables : <code>{date_debut}</code>, <code>{date_fin}</code>, <code>{telephone_agence}</code> — remplies à partir des dates ci-dessous et du téléphone agence.</p>
+            <div class="d-flex flex-wrap gap-2">
+                {% for p in responderPresets|default([]) %}
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-responder-preset="{{ p.code }}">{{ p.label }}</button>
+                {% else %}
+                    <span class="small text-muted">Aucun modèle actif. Ajoutez-en dans l’administration.</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        {{ form_row(form.content) }}
+        <div class="row g-3 mb-3">
+            <div class="col-12 col-md-6">
+                {{ form_row(form.fromDate) }}
+            </div>
+            <div class="col-12 col-md-6">
+                {{ form_row(form.toDate) }}
+            </div>
+        </div>
+
+        <div class="portal-btn-group mt-4">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="{{ path('app_account') }}" class="btn btn-outline-secondary">Annuler</a>
+        </div>
+    {{ form_end(form) }}
+
+    <script>
+        (function () {
+            const presetContents = {{ responderPresetContentsJson|default('{}')|raw }};
+            const agencyPhone = {{ responderPresetAgencyPhone|default('')|json_encode|raw }};
+            const textareaId = {{ form.content.vars.id|json_encode|raw }};
+            const fromId = {{ form.fromDate.vars.id|json_encode|raw }};
+            const toId = {{ form.toDate.vars.id|json_encode|raw }};
+
+            function formatDateTimeLocal(value) {
+                if (!value || !String(value).trim()) {
+                    return '—';
+                }
+                const m = String(value).trim().match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+                if (!m) {
+                    return '—';
+                }
+                const d = m[3];
+                const mo = m[2];
+                const y = m[1];
+                const h = m[4];
+                const mi = m[5];
+                return d + '/' + mo + '/' + y + ' à ' + h + ':' + mi;
+            }
+
+            function applyPresetVariables(template) {
+                const fromEl = document.getElementById(fromId);
+                const toEl = document.getElementById(toId);
+                const fromVal = fromEl ? fromEl.value : '';
+                const toVal = toEl ? toEl.value : '';
+                const phone = (agencyPhone && String(agencyPhone).trim()) ? String(agencyPhone).trim() : '—';
+                return template
+                    .split('{date_debut}').join(formatDateTimeLocal(fromVal))
+                    .split('{date_fin}').join(formatDateTimeLocal(toVal))
+                    .split('{telephone_agence}').join(phone);
+            }
+
+            document.querySelectorAll('[data-responder-preset]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const key = btn.getAttribute('data-responder-preset');
+                    const raw = presetContents[key];
+                    if (typeof raw !== 'string') {
+                        return;
+                    }
+                    const text = applyPresetVariables(raw);
+                    const ta = document.getElementById(textareaId);
+                    if (!ta) {
+                        return;
+                    }
+                    if (ta.value.trim() !== '' && !window.confirm('Remplacer tout le message actuel par ce modèle ?')) {
+                        return;
+                    }
+                    ta.value = text;
+                });
+            });
+        })();
+    </script>
+
+    {% if responder is defined and responder %}
+        <form method="post"
+              action="{{ path('app_account_responder_delete', { id: responder.id }) }}"
+              class="mt-4 pt-4 border-top border-opacity-25"
+              style="border-color: rgba(58, 50, 44, 0.12) !important;"
+              onsubmit="return confirm('Supprimer définitivement le répondeur sur OVH et dans l’application ?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete_responder_' ~ responder.id) }}">
+            <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer le répondeur</button>
+        </form>
+    {% endif %}
+{% endblock %}

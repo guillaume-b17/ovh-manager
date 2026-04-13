@@ -87,19 +87,11 @@ class OvhResponderService
 
         $domain = $account->getDomain();
         $name   = $account->getAccountName();
-        $tzParis = new \DateTimeZone('Europe/Paris');
-        $now = new \DateTimeImmutable('now', $tzParis);
 
-        // 🔸 Validation des dates
         $from = $responder->getFromDate();
         $to   = $responder->getToDate();
 
-        if ($from && $from < $now) {
-            $this->logger->warning("[Responder Validation] Date 'from' antérieure : correction automatique");
-            $from = $now;
-        }
-
-        if ($to && $to < $from) {
+        if ($to && $from && $to < $from) {
             $this->logger->warning("[Responder Validation] Date 'to' avant 'from' : correction automatique");
             $to = $from->modify('+1 day');
         }
@@ -135,18 +127,11 @@ class OvhResponderService
 
         $domain = $account->getDomain();
         $name   = $account->getAccountName();
-        $tzParis = new \DateTimeZone('Europe/Paris');
-        $now = new \DateTimeImmutable('now', $tzParis);
 
         $from = $responder->getFromDate();
         $to   = $responder->getToDate();
 
-        if ($from && $from < $now) {
-            $this->logger->warning("[Responder Validation] Date 'from' antérieure : correction automatique");
-            $from = $now;
-        }
-
-        if ($to && $to < $from) {
+        if ($to && $from && $to < $from) {
             $this->logger->warning("[Responder Validation] Date 'to' avant 'from' : correction automatique");
             $to = $from->modify('+1 day');
         }

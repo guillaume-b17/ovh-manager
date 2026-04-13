@@ -2,7 +2,10 @@
 
 namespace App\Service;
 
+use App\Entity\EmailAccount;
 use App\Entity\Redirection;
+use App\Entity\User;
+use App\Repository\EmailAccountRepository;
 use App\Repository\RedirectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -15,6 +18,7 @@ class OvhRedirectionService
     public function __construct(
         OvhClientService $ovhClientService,
         private RedirectionRepository $repository,
+        private EmailAccountRepository $emailAccountRepository,
         private EntityManagerInterface $em,
         private LoggerInterface $logger
     ) {
@@ -177,49 +181,66 @@ class OvhRedirectionService
      * Attend que la tâche OVH soit terminée, puis récupère l'ID réel de redirection.
      * Retourne l'ID OVH ou null si rien trouvé après le délai.
      */
-    public function waitForRedirectionId(string $domain, string $from, string $to, string $taskId, int $timeoutMs = 8000): ?string
+    public function waitForRedirectionId(string $domain, string $from, string $to, string $taskId, int $timeoutMs = 15000): ?string
     {
-        $elapsed = 0;
-        $interval = 1000000; // 1 seconde entre chaque check
-        $maxAttempts = (int) ceil($timeoutMs / 1000);
+        $interval = 1000000;
+        $maxAttempts = max(1, (int) ceil($timeoutMs / 1000));
+        $taskDone = false;
 
         try {
-            for ($i = 0; $i < $maxAttempts; $i++) {
-                // Vérifie le statut de la tâche
+            for ($i = 0; $i < $maxAttempts; ++$i) {
                 $taskInfo = $this->client->get("/email/domain/{$domain}/task/{$taskId}");
                 $status = is_array($taskInfo) ? ($taskInfo['status'] ?? null) : (is_object($taskInfo) ? ($taskInfo->status ?? null) : null);
 
                 $this->logger->info("[OVH] Statut tâche {$taskId}: {$status}");
 
-                if ($status === 'done') {
-                    // Une fois terminée, tente de retrouver la redirection
-                    $ids = $this->client->get("/email/domain/{$domain}/redirection", [
-                        'from' => $from,
-                        'to' => $to,
-                    ]);
-
-                    $this->logger->info("[OVH] Redirections trouvées après tâche #{$taskId} → " . print_r($ids, true));
-
-                    if (is_array($ids) && count($ids) > 0) {
-                        $id = (string) end($ids);
-                        $this->logger->info("[OVH] Redirection finale créée avec ID {$id}");
-                        return $id;
-                    }
-
-                    $this->logger->warning("[OVH] Tâche {$taskId} terminée, mais aucune redirection trouvée pour {$from} → {$to}");
-                    return null;
+                if ('done' === $status) {
+                    $taskDone = true;
+                    break;
                 }
 
                 usleep($interval);
-                $elapsed += $interval / 1000;
             }
 
-            $this->logger->warning("[OVH] Timeout atteint (aucune redirection trouvée pour {$from} → {$to})");
+            // La liste OVH peut mettre quelques secondes à refléter la redirection après « done », ou la tâche peut dépasser le délai alors que la redirection existe déjà.
+            $id = $this->pollRedirectionIdFromList($domain, $from, $to, 25, 800000);
+            if (null !== $id) {
+                return $id;
+            }
+
+            if (!$taskDone) {
+                $this->logger->warning("[OVH] Timeout tâche {$taskId} sans ID listé pour {$from} → {$to}");
+            } else {
+                $this->logger->warning("[OVH] Tâche {$taskId} terminée mais aucune redirection listée pour {$from} → {$to} après rafraîchissements");
+            }
+
             return null;
         } catch (\Throwable $e) {
             $this->logger->error("[OVH] waitForRedirectionId error: {$e->getMessage()}");
-            return null;
+
+            return $this->pollRedirectionIdFromList($domain, $from, $to, 10, 800000);
         }
+    }
+
+    /**
+     * Interroge l’API liste des redirections (filtres from/to) plusieurs fois.
+     */
+    private function pollRedirectionIdFromList(string $domain, string $from, string $to, int $maxTries, int $sleepMicros): ?string
+    {
+        for ($j = 0; $j < $maxTries; ++$j) {
+            $ids = $this->listIds($domain, $from, $to);
+            if ([] !== $ids) {
+                $id = (string) end($ids);
+                $this->logger->info("[OVH] Redirection trouvée par liste filtrée : {$id}");
+
+                return $id;
+            }
+            if ($j < $maxTries - 1) {
+                usleep($sleepMicros);
+            }
+        }
+
+        return null;
     }
 
 
@@ -278,6 +299,8 @@ class OvhRedirectionService
                 $entity->setLocalCopy((bool)$data['localCopy']);
             }
 
+            $this->attachFromAccountIfKnown($entity);
+
             $this->em->persist($entity);
             $count++;
         }
@@ -307,6 +330,43 @@ class OvhRedirectionService
         return $results;
     }
 
+    /**
+     * Synchronise les redirections OVH pour les domaines des boîtes de l’utilisateur (portail /compte).
+     */
+    public function syncRedirectionsForUser(User $user): int
+    {
+        $domains = [];
+        foreach ($user->getEmailAccounts() as $account) {
+            if (!$account instanceof EmailAccount) {
+                continue;
+            }
+            $d = $account->getDomain();
+            if (null !== $d && '' !== trim($d)) {
+                $domains[trim($d)] = true;
+
+                continue;
+            }
+            $email = $account->getEmail();
+            if (null !== $email && str_contains($email, '@')) {
+                $dom = substr(strrchr($email, '@'), 1);
+                if ('' !== $dom) {
+                    $domains[$dom] = true;
+                }
+            }
+        }
+
+        $total = 0;
+        foreach (array_keys($domains) as $domain) {
+            try {
+                $total += $this->syncDomain($domain);
+            } catch (\Throwable $e) {
+                $this->logger->error("[OVH] syncRedirectionsForUser {$domain} : {$e->getMessage()}");
+            }
+        }
+
+        return $total;
+    }
+
     // ============================================================
     // 🔹 UTILITAIRES MÉTIER
     // ============================================================
@@ -323,6 +383,23 @@ class OvhRedirectionService
 
         $this->logger->info("[OVH] Redirection supprimée : {$r->getFromEmail()} → {$r->getToEmail()}");
         return true;
+    }
+
+    private function attachFromAccountIfKnown(Redirection $entity): void
+    {
+        $from = trim($entity->getFromEmail());
+        if ('' === $from) {
+            return;
+        }
+
+        $account = $this->emailAccountRepository->findOneByEmailIgnoreCase($from);
+        if (null === $account && !str_contains($from, '@')) {
+            $account = $this->emailAccountRepository->findOneByEmailIgnoreCase($from.'@'.$entity->getDomain());
+        }
+
+        if (null !== $account) {
+            $entity->setFromAccount($account);
+        }
     }
 
 }

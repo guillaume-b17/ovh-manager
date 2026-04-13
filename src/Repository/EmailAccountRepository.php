@@ -16,6 +16,21 @@ class EmailAccountRepository extends ServiceEntityRepository
         parent::__construct($registry, EmailAccount::class);
     }
 
+    public function findOneByEmailIgnoreCase(string $email): ?EmailAccount
+    {
+        $email = trim($email);
+        if ('' === $email) {
+            return null;
+        }
+
+        return $this->createQueryBuilder('e')
+            ->where('LOWER(e.email) = :email')
+            ->setParameter('email', strtolower($email))
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return EmailAccount[] Returns an array of EmailAccount objects
     //     */

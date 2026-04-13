@@ -1,0 +1,14 @@
+responder:
+  preset:
+    absence: |
+      Bonjour,
+
+      Je suis absent pour une courte durée et je reviendrai vers vous très prochainement.
+
+      Cordialement
+    conges: |
+      Bonjour,
+
+      Je suis absent jusqu’au [date de retour]. En cas d’urgence, merci de contacter [coordonnées].
+
+      Cordialement

@@ -11,9 +11,12 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        // 🔐 Si utilisateur connecté → redirection vers EasyAdmin
         if ($this->getUser()) {
-            return $this->redirectToRoute('admin');
+            if ($this->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('admin');
+            }
+
+            return $this->redirectToRoute('app_account');
         }
 
         // 🧭 Sinon → redirection vers login

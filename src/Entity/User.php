@@ -45,6 +45,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: EmailAccount::class)]
     private Collection $emailAccounts;
 
+    public function __construct()
+    {
+        $this->emailAccounts = new ArrayCollection();
+    }
+
     public function getEmailAccounts(): Collection
     {
         return $this->emailAccounts;

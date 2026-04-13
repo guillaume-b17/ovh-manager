@@ -19,15 +19,9 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-
-            # --- Formulaire de connexion ---
-            form_login:
-                login_path: app_login
-                check_path: app_login
-                enable_csrf: true
-                default_target_path: admin    # ✅ redirection vers EasyAdmin après login
-                always_use_default_target_path: true
-
+            custom_authenticators:
+                - App\Security\EmailOtpAuthenticator
+            entry_point: App\Security\EmailOtpAuthenticator
 
             # --- Déconnexion ---
             logout:
@@ -47,6 +41,7 @@ security:
         - { path: ^/logout, roles: PUBLIC_ACCESS }
         - { path: ^/forgot-password, roles: PUBLIC_ACCESS }
         - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/, roles: ROLE_USER }
 
 

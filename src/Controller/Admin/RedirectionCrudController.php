@@ -191,7 +191,7 @@ class RedirectionCrudController extends AbstractCrudController
             $entityInstance->getFromEmail(),
             $entityInstance->getToEmail(),
             $taskId,
-            8000 // timeout total en millisecondes (~8 secondes)
+            20000
         );
 
         // ======================================================================

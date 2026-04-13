@@ -1,0 +1,3 @@
+twig:
+    globals:
+        email_login_dev_code: '%env(EMAIL_LOGIN_DEV_CODE)%'

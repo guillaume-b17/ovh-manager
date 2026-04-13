@@ -1,0 +1,48 @@
+{% extends 'account/account_base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <nav aria-label="Fil d’Ariane" class="portal-breadcrumb">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{{ path('app_account') }}">Mon compte</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+        </ol>
+    </nav>
+
+    <header class="portal-hero portal-hero--compact">
+        <h1 class="portal-hero__title">{{ title }}</h1>
+        <p class="portal-hero__subtitle mb-1">Boîte source : <strong>{{ account.email }}</strong></p>
+        <p class="small text-muted mb-0">Les messages reçus sur cette adresse seront transférés vers l’adresse indiquée ci-dessous.</p>
+    </header>
+
+    {{ form_start(form, { attr: { class: 'portal-form-card', novalidate: 'novalidate' } }) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.toEmail) }}
+        {% if form.localCopy is defined %}
+            {{ form_row(form.localCopy) }}
+        {% elseif redirection is defined and redirection %}
+            <div class="mb-3">
+                <span class="form-label">Copie locale</span>
+                <p class="mb-0">{{ redirection.localCopy ? 'Oui' : 'Non' }}</p>
+                <p class="form-text">La copie locale ne peut pas être modifiée après création (limitation OVH).</p>
+            </div>
+        {% endif %}
+
+        <div class="portal-btn-group mt-4">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="{{ path('app_account') }}" class="btn btn-outline-secondary">Annuler</a>
+        </div>
+    {{ form_end(form) }}
+
+    {% if redirection is defined and redirection %}
+        <form method="post"
+              action="{{ path('app_account_redirection_delete', { id: redirection.id }) }}"
+              class="mt-4 pt-4 border-top border-opacity-25"
+              style="border-color: rgba(58, 50, 44, 0.12) !important;"
+              onsubmit="return confirm('Supprimer définitivement cette redirection sur OVH et dans l’application ?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete_redirection_' ~ redirection.id) }}">
+            <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer cette redirection</button>
+        </form>
+    {% endif %}
+{% endblock %}

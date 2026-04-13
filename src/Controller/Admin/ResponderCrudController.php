@@ -109,17 +109,10 @@ class ResponderCrudController extends AbstractCrudController
             return;
         }
 
-        // 🕒 Validation des dates avant création
-        $now = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
         $from = $entityInstance->getFromDate();
         $to = $entityInstance->getToDate();
 
-        if ($from && $from < $now) {
-            $this->addFlash('danger', '❌ La date de début ne peut pas être antérieure à maintenant.');
-            return;
-        }
-
-        if ($to && $to < $from) {
+        if ($to && $from && $to < $from) {
             $this->addFlash('danger', '❌ La date de fin doit être postérieure à la date de début.');
             return;
         }
@@ -151,17 +144,10 @@ class ResponderCrudController extends AbstractCrudController
             return;
         }
 
-        // 🕒 Validation des dates avant mise à jour
-        $now = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
         $from = $entityInstance->getFromDate();
         $to = $entityInstance->getToDate();
 
-        if ($from && $from < $now) {
-            $this->addFlash('danger', '❌ La date de début ne peut pas être antérieure à maintenant.');
-            return;
-        }
-
-        if ($to && $to < $from) {
+        if ($to && $from && $to < $from) {
             $this->addFlash('danger', '❌ La date de fin doit être postérieure à la date de début.');
             return;
         }

@@ -1,0 +1,208 @@
+{% extends 'account/account_base.html.twig' %}
+
+{% block title %}Mon compte e-mail{% endblock %}
+
+{% block body %}
+    <header class="portal-hero">
+        <div class="row g-3 align-items-start align-items-sm-center">
+            <div class="col-12 col-sm">
+                <h1 class="portal-hero__title">Bonjour, bienvenue sur votre espace</h1>
+                <p class="portal-hero__subtitle">{{ user.userIdentifier }}</p>
+            </div>
+            <div class="col-12 col-sm-auto">
+                <div class="portal-hero__actions">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('admin') }}" class="btn btn-outline-secondary btn-sm">Administration</a>
+                    {% endif %}
+                    <a href="{{ path('app_logout') }}" class="btn btn-outline-danger btn-sm">Déconnexion</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% if redirectCountdown|default(0) > 0 %}
+        <div class="alert portal-countdown mb-4" role="status">
+            <p class="mb-0 small">
+                Mise à jour des redirections dans
+                <strong id="compte-rechargement-cpt" class="fs-5">{{ redirectCountdown }}</strong>
+                s, puis rechargement automatique.
+            </p>
+        </div>
+        <script>
+            (function () {
+                var sec = {{ redirectCountdown|json_encode|raw }};
+                var label = document.getElementById('compte-rechargement-cpt');
+                var url = {{ redirectCountdownSyncUrl|json_encode|raw }};
+                var timer = window.setInterval(function () {
+                    sec -= 1;
+                    if (label) {
+                        label.textContent = String(sec);
+                    }
+                    if (sec <= 0) {
+                        window.clearInterval(timer);
+                        window.location.href = url;
+                    }
+                }, 1000);
+            })();
+        </script>
+    {% endif %}
+
+    {% if accountsData is empty %}
+        <div class="alert portal-empty mb-0" role="status">
+            Aucun compte e-mail n’est lié à votre profil pour l’instant. Après une synchronisation côté administrateur, vos boîtes apparaîtront ici.
+        </div>
+    {% endif %}
+
+    {% for row in accountsData %}
+        {% set account = row.account %}
+        <article class="portal-card">
+            <header class="portal-card__header">
+                <p class="portal-card__email">{{ account.email }}</p>
+                {% if account.displayName %}
+                    <p class="portal-card__meta">{{ account.displayName }}</p>
+                {% endif %}
+            </header>
+            <div class="portal-card__body">
+                <div class="row portal-triple g-3 g-lg-4">
+                    {# Bloc 1 — Quota #}
+                    <div class="col-12 col-lg-4">
+                        <div class="portal-block portal-block--quota">
+                            <span class="portal-section-label">Quota &amp; utilisation</span>
+                            <div class="portal-block__inner">
+                                <dl class="row portal-dl small mb-0">
+                                    <dt class="col-12 col-sm-5 col-lg-12">Dernière synchro</dt>
+                                    <dd class="col-12 col-sm-7 col-lg-12">{{ account.dateSync ? account.dateSync|date('d/m/Y H:i') : '—' }}</dd>
+                                    <dt class="col-12 col-sm-5 col-lg-12">Taille / quota</dt>
+                                    <dd class="col-12 col-sm-7 col-lg-12">
+                                        {% if account.size %}
+                                            {{ (account.size / 1024 / 1024 / 1024)|number_format(2, ',', ' ') }} Go
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </dd>
+                                    <dt class="col-12 col-sm-5 col-lg-12">Utilisation</dt>
+                                    <dd class="col-12 col-sm-7 col-lg-12">
+                                        {% if account.usageQuota %}
+                                            {{ (account.usageQuota / 1024 / 1024 / 1024)|number_format(2, ',', ' ') }} Go
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                        {% if account.usagePercent is not null %}
+                                            <span class="text-muted">({{ account.usagePercent }} %)</span>
+                                        {% endif %}
+                                    </dd>
+                                    <dt class="col-12 col-sm-5 col-lg-12">Nb messages</dt>
+                                    <dd class="col-12 col-sm-7 col-lg-12">{{ account.usageEmailCount ?? '—' }}</dd>
+                                    <dt class="col-12 col-sm-5 col-lg-12">Date mesure</dt>
+                                    <dd class="col-12 col-sm-7 col-lg-12 mb-0">{{ account.usageDate ? account.usageDate|date('d/m/Y H:i') : '—' }}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Bloc 2 — Répondeur #}
+                    <div class="col-12 col-lg-4">
+                        <div class="portal-block portal-block--responder">
+                            <span class="portal-section-label">Répondeur</span>
+                            {% set responders = account.responders %}
+                            {% set firstResponder = responders|first %}
+                            <div class="portal-btn-group mb-3">
+                                {% if firstResponder %}
+                                    <a href="{{ path('app_account_responder_edit', { id: firstResponder.id }) }}" class="btn btn-sm btn-primary">Modifier</a>
+                                    <form method="post"
+                                          action="{{ path('app_account_responder_delete', { id: firstResponder.id }) }}"
+                                          class="d-inline"
+                                          onsubmit="return confirm('Supprimer définitivement le répondeur sur OVH et dans l’application ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete_responder_' ~ firstResponder.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                                    </form>
+                                {% else %}
+                                    <a href="{{ path('app_account_responder_new', { accountId: account.id }) }}" class="btn btn-sm btn-primary">Créer</a>
+                                {% endif %}
+                            </div>
+                            <div class="portal-block__inner">
+                                {% if responders is empty %}
+                                    <p class="small text-muted mb-0">Aucun répondeur pour cette boîte.</p>
+                                {% else %}
+                                    <ul class="list-group list-group-flush portal-list-group">
+                                        {% for r in responders %}
+                                            <li class="list-group-item small">
+                                                <div class="fw-semibold">{{ r.statusLabel }}</div>
+                                                <div class="text-muted mt-1">
+                                                    Du {{ r.fromDate ? r.fromDate|date('d/m/Y H:i') : '—' }}
+                                                    au {{ r.toDate ? r.toDate|date('d/m/Y H:i') : '—' }}
+                                                </div>
+                                                {% if r.copy %}
+                                                    <div class="mt-1">Copie : {{ r.copyTo ?? '—' }}</div>
+                                                {% endif %}
+                                                {% if r.content %}
+                                                    <pre class="mt-2 mb-0 p-2 portal-pre small text-wrap" style="white-space: pre-wrap;">{{ r.content }}</pre>
+                                                {% endif %}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Bloc 3 — Redirections #}
+                    <div class="col-12 col-lg-4">
+                        <div class="portal-block portal-block--redirect">
+                            <span class="portal-section-label">Redirections</span>
+                            <div class="portal-btn-group mb-3">
+                                <a href="{{ path('app_account_redirection_new', { accountId: account.id }) }}" class="btn btn-sm btn-primary">Nouvelle</a>
+                                <form method="post" action="{{ path('app_account_sync_redirections') }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('sync_redirections') }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary" title="Interroger OVH et actualiser les redirections (toutes vos boîtes)">
+                                        Vérifier OVH
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="portal-block__inner">
+                                {% if row.redirections is empty %}
+                                    <p class="small text-muted mb-0">Aucune redirection pour cette boîte.</p>
+                                {% else %}
+                                    <div class="portal-table-wrap">
+                                        <table class="table table-sm align-middle portal-table mb-0">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">De</th>
+                                                <th scope="col">Vers</th>
+                                                <th scope="col" class="d-none d-xl-table-cell">Copie</th>
+                                                <th scope="col" class="text-end"></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for redir in row.redirections %}
+                                                <tr>
+                                                    <td class="text-break">{{ redir.fromEmail }}</td>
+                                                    <td class="text-break">{{ redir.toEmail }}</td>
+                                                    <td class="d-none d-xl-table-cell">{{ redir.localCopy ? 'Oui' : 'Non' }}</td>
+                                                    <td>
+                                                        <div class="d-xl-none small text-muted mb-1">Copie : {{ redir.localCopy ? 'Oui' : 'Non' }}</div>
+                                                        <div class="portal-table-actions">
+                                                            <a href="{{ path('app_account_redirection_edit', { id: redir.id }) }}" class="btn btn-sm btn-outline-secondary">Modifier</a>
+                                                            <form method="post"
+                                                                  action="{{ path('app_account_redirection_delete', { id: redir.id }) }}"
+                                                                  class="d-inline"
+                                                                  onsubmit="return confirm('Supprimer cette redirection sur OVH et dans l’application ?');">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete_redirection_' ~ redir.id) }}">
+                                                                <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    {% endfor %}
+{% endblock %}
